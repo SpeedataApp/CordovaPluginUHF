@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+           id="com.speedata.cordova.plugin.UHF"
+      version="1.0.1">
+    <name>UHF</name>
+    <description>UHF PhoneGap Plugin</description>
+    <license>MIT</license>
+    <keywords>phonegap,rfid,UHF</keywords>
+
+    <engines>
+      <engine name="cordova" version=">=3.4.0" />
+    </engines>    
+    
+    <js-module src="www/uhf.js" name="UHF">
+        <clobbers target="window.uhf" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="UHF">
+                <param name="android-package" value="com.speedata.cordova.plugin.UHF"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/UHF.java" target-dir="src/com/speedata/cordova/plugin" />    
+
+        <source-file src="src/android/armeabi/libDeviceAPI.so" target-dir="libs/armeabi" />
+		<source-file src="src/android/armeabi/libjni_rfid_driver.so" target-dir="libs/armeabi" />
+        <source-file src="src/android/armeabi/libModuleAPIJni.so" target-dir="libs/armeabi" />
+		<source-file src="src/android/armeabi/libpackage.so" target-dir="libs/armeabi" />
+		<source-file src="src/android/armeabi/libserial_port_spd.so" target-dir="libs/armeabi" />
+		<source-file src="src/android/armeabi/libSP.so" target-dir="libs/armeabi" />
+		<source-file src="src/android/armeabi/libuhf_sdk.so" target-dir="libs/armeabi" />
+		<source-file src="src/android/armeabi/libUhf-lib.so" target-dir="libs/armeabi" />
+		<source-file src="src/android/armeabi/libuhfrfid.so" target-dir="libs/armeabi" />
+		
+		<source-file src="src/android/App_Demo_API_V1.0.5.jar" target-dir="libs" />	
+		<source-file src="src/android/DeviceAPIver20150204.jar" target-dir="libs" />
+		<source-file src="src/android/logutil-1.5.1.1.jar" target-dir="libs" />	
+		<source-file src="src/android/SystemProperties.jar" target-dir="libs" />	
+		
+		
+        <source-file src="src/android/device_1.6.8.jar" target-dir="libs" />		
+		<source-file src="src/android/dom4j-full.jar" target-dir="libs" />
+		<source-file src="src/android/fastjson-1.2.7.jar" target-dir="libs" />	
+		<source-file src="src/android/gson-2.2.4.jar" target-dir="libs" />	
+		<source-file src="src/android/Module_Android_Power.jar" target-dir="libs" />
+        <source-file src="src/android/ModuleAPI_J.jar" target-dir="libs" />	
+		<source-file src="src/android/R2K.jar" target-dir="libs" />	
+		<source-file src="src/android/uhf_8.1.0.jar" target-dir="libs" />
+		
+        	
+		
+     </platform>          
+</plugin>

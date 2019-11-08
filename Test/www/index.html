@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta name="viewport" content="width=320; user-scalable=no" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<title>Cordova Tests</title>
+<link rel="stylesheet" href="css/master.css" type="text/css"
+	media="screen" title="no title">
+<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/main.js"></script>
+<script type="text/javascript" charset="utf-8" src="uhf.js"></script>
+<script>
+
+	function openDev(){
+	try {
+			
+			//GPIO上電
+			uhf.openDev(winInit,failInit);
+		} catch (err) {
+			alert("Error: " + err)
+		}
+	} 
+	function closeDev(){
+	try {
+			
+			//GPIO下电
+			uhf.closeDev(winInit,failInit);
+		} catch (err) {
+			alert("Error: " + err)
+		}
+	}
+	
+	function readArea(){
+	try {
+			//掩码
+			var jsonmask=[true,"BBBBFFFFEEEEFFFF99997777"];
+			uhf.selectCard(null,null,jsonmask);
+			//设置读卡区域，地址，块数，密码
+			var jsonstr=[1,2,2,"00000000"];
+			uhf.readArea(null,failInit,jsonstr);
+			uhf.getReadAreaResult(readResult, readFail);
+		} catch (err) {
+			alert("Error: " + err)
+		}
+	}
+	
+	var readResult = function (result) {
+            document.getElementById("content").innerHTML = result;
+        };
+
+    var readFail = function (error) {
+            document.getElementById("content").innerHTML = error;
+        };
+        
+    function writeArea(){
+	try {
+	       //设置写卡区域，地址，密码，内容
+			var jsonstr=[3,2,"00000000","11111111"];
+			uhf.writeArea(null,failInit,jsonstr);
+			uhf.getWriteAreaResult(writeResult, writeFail);
+		} catch (err) {
+			alert("Error: " + err)
+		}
+	}
+	
+	var writeResult = function (result) {
+            document.getElementById("content").innerHTML = result;
+        };
+
+    var writeFail = function (error) {
+            document.getElementById("content").innerHTML = error;
+        };
+        
+        
+	function setAntennaPower(){
+	try {
+	       //设置天线功率（3992模块传参0代表false 1代表true）,（旗联-FLX模块取值为19-30）其他0-30
+			var jsonstr=[29];
+			uhf.setAntennaPower(winInit,failInit,jsonstr);
+			
+		} catch (err) {
+			alert("Error: " + err)
+		}
+	}
+	function getAntennaPower(){
+	try {
+	       //读取当前天线功率值
+			uhf.getAntennaPower(winInit,failInit);
+			
+		} catch (err) {
+			alert("Error: " + err)
+		}
+	}
+	function setFreqRegion(){
+	try {
+	       //设置频率区域
+	        var jsonstr=[2];
+			uhf.setFreqRegion(winInit,failInit,jsonstr);
+			
+		} catch (err) {
+			alert("Error: " + err)
+		}
+	}
+	function getFreqRegion(){
+	try {
+	       //获取当前频率区域
+			uhf.getFreqRegion(winInit,failInit);
+			
+		} catch (err) {
+			alert("Error: " + err)
+		}
+	}
+	
+	function inventoryStart(){
+	try {
+			//取消掩码
+			uhf.selectCard(false,"");
+			//开始盘点
+			uhf.inventoryStart(null,failInit);
+			uhf.getInventoryResult(writeResult, writeFail);
+		} catch (err) {
+			alert("Error: " + err)
+		}
+	}
+	function inventoryStop(){
+	try {
+	       //停止盘点
+			uhf.inventoryStop(winInit,failInit);
+			
+		} catch (err) {
+			alert("Error: " + err)
+		}
+	}
+	
+	var winInit = function(result) {
+	    alert(result)
+	};
+	var failInit = function(error) {
+		alert("failed: " + error)
+	};
+	
+	function clean(){
+		document.getElementById("content").innerHTML = "";
+	}
+	
+</script>
+</head>
+<body onload="onLoad()" onunload="onUnLoaded()"  id="stage" class="theme">
+	<h1>uhf js test</h1>
+	<div id="info">
+		<h4>uhf js test</h4>
+	</div>
+	<button class="btn large" style="width:100px;height:50px" onclick="openDev();">  上电  </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="closeDev();">  下电  </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="readArea();">  读卡  </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="writeArea();">  写卡  </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="inventoryStart();">  开始盘点  </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="inventoryStop();">  停止盘点  </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="setAntennaPower();">  设置天线功率  </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="getAntennaPower();">  获取天线功率  </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="setFreqRegion();">  设置频率区域  </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="getFreqRegion();">  获取频率区域  </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="clean();">  清空内容  </button>
+	
+	<p id="content"></p>
+</body>
+</html>
