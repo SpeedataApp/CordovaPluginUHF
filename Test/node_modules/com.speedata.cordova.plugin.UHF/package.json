@@ -1,0 +1,26 @@
+{
+  "name": "com.speedata.cordova.plugin.UHF",
+  "version": "1.0.1",
+  "description": "UHF PhoneGap Plugin",
+  "cordova": {
+    "id": "com.speedata.cordova.plugin.UHF",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "phonegap",
+    "rfid",
+    "UHF",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.4.0"
+    }
+  ],
+  "author": "Echo",
+  "license": "MIT"
+}

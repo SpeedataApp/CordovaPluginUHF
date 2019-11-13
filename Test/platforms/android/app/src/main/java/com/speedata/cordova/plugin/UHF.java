@@ -301,6 +301,32 @@ public class UHF extends CordovaPlugin {
 					e.printStackTrace();
 					callbackContextID.error(Log.getStackTraceString(e));
 				}
+			} else if (action.equals("setQueryTagGroup")) {
+				Log.d(LOG_TAG, "setQueryTagGroup");
+				try {
+					int selected = args.getInt(0);
+					int session = args.getInt(1);
+					int target = args.getInt(2);
+					int result = uhfService.setQueryTagGroup(selected, session, target);
+					Log.d(LOG_TAG, "setQueryTagGroup" + result);
+					if (result == 0) {
+						callbackContextID.success("success");
+					} else {
+						callbackContextID.error("ErrorCode:" + result);
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					callbackContextID.error(Log.getStackTraceString(e));
+				}
+			} else if (action.equals("getQueryTagGroup")) {
+				int result = uhfService.getQueryTagGroup();
+				Log.d(LOG_TAG, "getQueryTagGroup" + result);
+				if (result != -1) {
+					callbackContextID.success(result);
+				} else {
+					callbackContextID.error("ErrorCode:" + result);
+				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

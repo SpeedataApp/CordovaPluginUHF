@@ -54,5 +54,13 @@ var uhf = {
     selectCard: function(successCallback, errorCallback, tags) {
         cordova.exec(successCallback, errorCallback, 'UHF', 'selectCard', tags);
     }
+	,
+	setQueryTagGroup: function(successCallback, errorCallback, tags) {
+        cordova.exec(successCallback, errorCallback, 'UHF', 'setQueryTagGroup', tags);
+    }
+	,
+	getQueryTagGroup: function(successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, 'UHF', 'getQueryTagGroup', []);
+    }
 };
 module.exports = uhf;

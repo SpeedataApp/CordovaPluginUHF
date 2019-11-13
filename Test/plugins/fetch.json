@@ -10,7 +10,7 @@
   "com.speedata.cordova.plugin.UHF": {
     "source": {
       "type": "local",
-      "path": "D:\\CordovaNewUHF\\CordovaNewUHF\\Test\\node_modules\\com.speedata.cordova.plugin.UHF"
+      "path": "D:\\MyCordova\\CordovaNewUHF\\Test\\node_modules\\com.speedata.cordova.plugin.UHF"
     },
     "is_top_level": true,
     "variables": {}
