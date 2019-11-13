@@ -36,6 +36,16 @@
 		<source-file src="src/android/armeabi/libUhf-lib.so" target-dir="libs/armeabi" />
 		<source-file src="src/android/armeabi/libuhfrfid.so" target-dir="libs/armeabi" />
 		
+		<source-file src="src/android/arm64-v8a/libjni_rfid_driver.so" target-dir="libs/arm64-v8a" />
+		<source-file src="src/android/arm64-v8a/libModuleAPIJni.so" target-dir="libs/arm64-v8a" />
+		<source-file src="src/android/arm64-v8a/libuhf_sdk.so" target-dir="libs/arm64-v8a" />
+		<source-file src="src/android/arm64-v8a/libserial_port_spd.so" target-dir="libs/arm64-v8a" />
+		
+		<source-file src="src/android/armeabi-v7a/libjni_rfid_driver.so" target-dir="libs/armeabi-v7a" />
+		<source-file src="src/android/armeabi-v7a/libModuleAPIJni.so" target-dir="libs/armeabi-v7a" />
+		<source-file src="src/android/armeabi-v7a/libuhf_sdk.so" target-dir="libs/armeabi-v7a" />
+		<source-file src="src/android/armeabi-v7a/libserial_port_spd.so" target-dir="libs/armeabi-v7a" />
+		
 		<source-file src="src/android/App_Demo_API_V1.0.5.jar" target-dir="libs" />	
 		<source-file src="src/android/DeviceAPIver20150204.jar" target-dir="libs" />
 		<source-file src="src/android/logutil-1.5.1.1.jar" target-dir="libs" />	
