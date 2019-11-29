@@ -23,6 +23,7 @@ import com.speedata.libuhf.interfaces.OnSpdReadListener;
 import com.speedata.libuhf.interfaces.OnSpdWriteListener;
 import com.speedata.libutils.ConfigUtils;
 import com.speedata.libutils.ReadBean;
+import com.speedata.libuhf.utils.StringUtils;
 import com.uhf.structures.OnInventoryListener;
 import com.uhf.structures.OnReadWriteListener;
 
@@ -176,7 +177,7 @@ public class UHF extends CordovaPlugin {
 					int addr = args.getInt(1);
 					String passwd = args.getString(2);
 					String content = args.getString(3);
-					byte[] contentBytes = content.getBytes();
+					byte[] contentBytes = StringUtils.stringToByte(content);
 					int result = uhfService.writeArea(area, addr,
 							contentBytes.length / 2, passwd, contentBytes);
 					Log.d(LOG_TAG, "writeArea" + result);
