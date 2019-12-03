@@ -328,6 +328,25 @@ public class UHF extends CordovaPlugin {
 				} else {
 					callbackContextID.error("ErrorCode:" + result);
 				}
+			} else if (action.equals("setNewEpc")) {
+				Log.d(LOG_TAG, "setNewEpc");
+				try {
+					String password = args.getString(0);
+					int len = args.getInt(1);
+					String hexEpc = args.getString(2);
+					byte[] newEpc = StringUtils.stringToByte(hexEpc);
+					int result = uhfService.setNewEpc(password, len, newEpc);
+					Log.d(LOG_TAG, "setNewEpc" + result);
+					if (result == 0) {
+						callbackContextID.success("success");
+					} else {
+						callbackContextID.error("ErrorCode:" + result);
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					callbackContextID.error(Log.getStackTraceString(e));
+				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

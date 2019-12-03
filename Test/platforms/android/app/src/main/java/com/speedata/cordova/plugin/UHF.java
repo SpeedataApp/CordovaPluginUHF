@@ -23,6 +23,7 @@ import com.speedata.libuhf.interfaces.OnSpdReadListener;
 import com.speedata.libuhf.interfaces.OnSpdWriteListener;
 import com.speedata.libutils.ConfigUtils;
 import com.speedata.libutils.ReadBean;
+import com.speedata.libuhf.utils.StringUtils;
 import com.uhf.structures.OnInventoryListener;
 import com.uhf.structures.OnReadWriteListener;
 
@@ -176,7 +177,7 @@ public class UHF extends CordovaPlugin {
 					int addr = args.getInt(1);
 					String passwd = args.getString(2);
 					String content = args.getString(3);
-					byte[] contentBytes = content.getBytes();
+					byte[] contentBytes = StringUtils.stringToByte(content);
 					int result = uhfService.writeArea(area, addr,
 							contentBytes.length / 2, passwd, contentBytes);
 					Log.d(LOG_TAG, "writeArea" + result);
@@ -326,6 +327,25 @@ public class UHF extends CordovaPlugin {
 					callbackContextID.success(result);
 				} else {
 					callbackContextID.error("ErrorCode:" + result);
+				}
+			} else if (action.equals("setNewEpc")) {
+				Log.d(LOG_TAG, "setNewEpc");
+				try {
+					String password = args.getString(0);
+					int len = args.getInt(1);
+					String hexEpc = args.getString(2);
+					byte[] newEpc = StringUtils.stringToByte(hexEpc);
+					int result = uhfService.setNewEpc(password, len, newEpc);
+					Log.d(LOG_TAG, "setNewEpc" + result);
+					if (result == 0) {
+						callbackContextID.success("success");
+					} else {
+						callbackContextID.error("ErrorCode:" + result);
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					callbackContextID.error(Log.getStackTraceString(e));
 				}
 			}
 		} catch (Exception e) {

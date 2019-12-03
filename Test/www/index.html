@@ -55,7 +55,7 @@
     function writeArea(){
 	try {
 	       //设置写卡区域，地址，密码，内容
-			var jsonstr=[3,2,"00000000","11111111"];
+			var jsonstr=[1,2,"00000000","11111111"];
 			uhf.writeArea(null,failInit,jsonstr);
 			uhf.getWriteAreaResult(writeResult, writeFail);
 		} catch (err) {
@@ -150,6 +150,20 @@
 		}
 	}
 	
+	function setNewEpc(){
+	try {
+			//掩码
+			var jsonmask=[true,"1111222233334444"];
+			uhf.selectCard(null,null,jsonmask);
+			//设置新的epc，密码，长度（word），新epc
+			var jsonstr=["00000000",4,"AAAA1111BBBB2222"];
+			uhf.setNewEpc(null,failInit,jsonstr);
+			uhf.getWriteAreaResult(writeResult, writeFail);
+		} catch (err) {
+			alert("Error: " + err)
+		}
+	}
+	
 	var winInit = function(result) {
 	    alert(result)
 	};
@@ -180,6 +194,7 @@
 	<button class="btn large" style="width:100px;height:50px" onclick="getFreqRegion();">  获取频率区域  </button>
 	<button class="btn large" style="width:100px;height:50px" onclick="setQueryTagGroup();">  设置通话项  </button>
 	<button class="btn large" style="width:100px;height:50px" onclick="getQueryTagGroup();">  获取通话项  </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="setNewEpc();">  设置新的EPC  </button>
 	<button class="btn large" style="width:100px;height:50px" onclick="clean();">  清空内容  </button>
 	
 	<p id="content"></p>

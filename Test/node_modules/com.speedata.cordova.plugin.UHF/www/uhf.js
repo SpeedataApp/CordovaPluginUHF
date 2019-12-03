@@ -1,13 +1,13 @@
 var uhf = {
-    openDev: function(successCallback, errorCallback) {
+    openDev: function (successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, 'UHF', 'openDev', []);
     }
     ,
-    closeDev: function(successCallback, errorCallback) {
+    closeDev: function (successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, 'UHF', 'closeDev', []);
     }
     ,
-    readArea: function(successCallback, errorCallback, tags) {
+    readArea: function (successCallback, errorCallback, tags) {
         cordova.exec(successCallback, errorCallback, 'UHF', 'readArea', tags);
     }
     ,
@@ -15,11 +15,11 @@ var uhf = {
         cordova.exec(successCallback, errorCallback, 'UHF', 'getReadAreaResult', []);
     }
     ,
-    inventoryStart: function(successCallback, errorCallback) {
+    inventoryStart: function (successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, 'UHF', 'inventoryStart', []);
     }
     ,
-    inventoryStop: function(successCallback, errorCallback) {
+    inventoryStop: function (successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, 'UHF', 'inventoryStop', []);
     }
     ,
@@ -27,7 +27,7 @@ var uhf = {
         cordova.exec(successCallback, errorCallback, 'UHF', 'getInventoryResult', []);
     }
     ,
-    writeArea: function(successCallback, errorCallback, tags) {
+    writeArea: function (successCallback, errorCallback, tags) {
         cordova.exec(successCallback, errorCallback, 'UHF', 'writeArea', tags);
     }
     ,
@@ -35,32 +35,36 @@ var uhf = {
         cordova.exec(successCallback, errorCallback, 'UHF', 'getWriteAreaResult', []);
     }
     ,
-    setAntennaPower: function(successCallback, errorCallback, tags) {
+    setAntennaPower: function (successCallback, errorCallback, tags) {
         cordova.exec(successCallback, errorCallback, 'UHF', 'setAntennaPower', tags);
     }
     ,
-    getAntennaPower: function(successCallback, errorCallback) {
+    getAntennaPower: function (successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, 'UHF', 'getAntennaPower', []);
     }
     ,
-    setFreqRegion: function(successCallback, errorCallback, tags) {
+    setFreqRegion: function (successCallback, errorCallback, tags) {
         cordova.exec(successCallback, errorCallback, 'UHF', 'setFreqRegion', tags);
     }
     ,
-    getFreqRegion: function(successCallback, errorCallback) {
+    getFreqRegion: function (successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, 'UHF', 'getFreqRegion', []);
     }
     ,
-    selectCard: function(successCallback, errorCallback, tags) {
+    selectCard: function (successCallback, errorCallback, tags) {
         cordova.exec(successCallback, errorCallback, 'UHF', 'selectCard', tags);
     }
-	,
-	setQueryTagGroup: function(successCallback, errorCallback, tags) {
+    ,
+    setQueryTagGroup: function (successCallback, errorCallback, tags) {
         cordova.exec(successCallback, errorCallback, 'UHF', 'setQueryTagGroup', tags);
     }
-	,
-	getQueryTagGroup: function(successCallback, errorCallback) {
+    ,
+    getQueryTagGroup: function (successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, 'UHF', 'getQueryTagGroup', []);
+    }
+    ,
+    setNewEpc: function (successCallback, errorCallback, tags) {
+        cordova.exec(successCallback, errorCallback, 'UHF', 'setNewEpc', tags);
     }
 };
 module.exports = uhf;
