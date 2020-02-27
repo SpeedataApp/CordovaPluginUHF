@@ -57,6 +57,13 @@ public class UHF extends CordovaPlugin {
 				String objectStr = gson.toJson(arg0);
 				sendString(objectStr);
 			}
+
+			@Override
+            public void onInventoryStatus(int status) {
+				Log.d(LOG_TAG, "onInventoryStatus");
+				String objectStr = gson.toJson(status);
+				sendString(objectStr);
+			}
 		});
 		uhfService.setOnReadListener(new OnSpdReadListener() {
 

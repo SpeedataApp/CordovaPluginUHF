@@ -1,202 +1,220 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
-<meta name="viewport" content="width=320; user-scalable=no" />
-<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-<title>Cordova Tests</title>
-<link rel="stylesheet" href="css/master.css" type="text/css"
-	media="screen" title="no title">
-<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/main.js"></script>
-<script type="text/javascript" charset="utf-8" src="uhf.js"></script>
-<script>
+	<meta name="viewport" content="width=320; user-scalable=no" />
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>Cordova Tests</title>
+	<link rel="stylesheet" href="css/master.css" type="text/css" media="screen" title="no title">
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/main.js"></script>
+	<script type="text/javascript" charset="utf-8" src="uhf.js"></script>
+	<script>
 
-	function openDev(){
-	try {
-			
-			//GPIO上電
-			uhf.openDev(winInit,failInit);
-		} catch (err) {
-			alert("Error: " + err)
+		function openDev() {
+			try {
+
+				//GPIO上電
+				uhf.openDev(winInit, failInit);
+			} catch (err) {
+				alert("Error: " + err)
+			}
 		}
-	} 
-	function closeDev(){
-	try {
-			
-			//GPIO下电
-			uhf.closeDev(winInit,failInit);
-		} catch (err) {
-			alert("Error: " + err)
+		function closeDev() {
+			try {
+
+				//GPIO下电
+				uhf.closeDev(winInit, failInit);
+			} catch (err) {
+				alert("Error: " + err)
+			}
 		}
-	}
-	
-	function readArea(){
-	try {
+
+		function readArea() {
+			try {
+				//设置读卡区域，地址，块数，密码
+				var jsonstr = [1, 2, 2, "00000000"];
+				uhf.readArea(null, failInit, jsonstr);
+				uhf.getReadAreaResult(readResult, readFail);
+			} catch (err) {
+				alert("Error: " + err)
+			}
+		}
+
+		var readResult = function (result) {
+			document.getElementById("content").innerHTML = result;
+		};
+
+		var readFail = function (error) {
+			document.getElementById("content").innerHTML = error;
+		};
+
+		function writeArea() {
+			try {
+				//设置写卡区域，地址，密码，内容
+				var jsonstr = [1, 2, "00000000", "11111111"];
+				uhf.writeArea(null, failInit, jsonstr);
+				uhf.getWriteAreaResult(writeResult, writeFail);
+			} catch (err) {
+				alert("Error: " + err)
+			}
+		}
+
+		var writeResult = function (result) {
+			document.getElementById("content").innerHTML = result;
+		};
+
+		var writeFail = function (error) {
+			document.getElementById("content").innerHTML = error;
+		};
+
+
+		function setAntennaPower() {
+			try {
+				//设置天线功率（3992模块传参0代表false 1代表true）,（旗联-FLX模块取值为19-30）其他0-30
+				var jsonstr = [29];
+				uhf.setAntennaPower(winInit, failInit, jsonstr);
+
+			} catch (err) {
+				alert("Error: " + err)
+			}
+		}
+		function getAntennaPower() {
+			try {
+				//读取当前天线功率值
+				uhf.getAntennaPower(winInit, failInit);
+
+			} catch (err) {
+				alert("Error: " + err)
+			}
+		}
+		function setFreqRegion() {
+			try {
+				//设置频率区域
+				var jsonstr = [2];
+				uhf.setFreqRegion(winInit, failInit, jsonstr);
+
+			} catch (err) {
+				alert("Error: " + err)
+			}
+		}
+		function getFreqRegion() {
+			try {
+				//获取当前频率区域
+				uhf.getFreqRegion(winInit, failInit);
+
+			} catch (err) {
+				alert("Error: " + err)
+			}
+		}
+
+		function inventoryStart() {
+			try {
+				//取消掩码
+				// var jsonmask = [false, ""];
+				// uhf.selectCard(null, null, jsonmask);
+				//开始盘点
+				uhf.inventoryStart(null, failInit);
+				uhf.getInventoryResult(writeResult, writeFail);
+			} catch (err) {
+				alert("Error: " + err)
+			}
+		}
+		function inventoryStop() {
+			try {
+				//停止盘点
+				uhf.inventoryStop(winInit, failInit);
+
+			} catch (err) {
+				alert("Error: " + err)
+			}
+		}
+
+		function setQueryTagGroup() {
+			try {
+				//设置session值
+				var jsonstr = [0, 0, 0];
+				uhf.setQueryTagGroup(winInit, failInit, jsonstr);
+			} catch (err) {
+				alert("Error: " + err)
+			}
+		}
+		function getQueryTagGroup() {
+			try {
+				//获取session值
+				uhf.getQueryTagGroup(winInit, failInit);
+			} catch (err) {
+				alert("Error: " + err)
+			}
+		}
+
+		function setNewEpc() {
+			try {
+				//掩码
+				var jsonmask = [true, "1111222233334444"];
+				uhf.selectCard(null, null, jsonmask);
+				//设置新的epc，密码，长度（word），新epc
+				var jsonstr = ["00000000", 4, "AAAA1111BBBB2222"];
+				uhf.setNewEpc(null, failInit, jsonstr);
+				uhf.getWriteAreaResult(writeResult, writeFail);
+			} catch (err) {
+				alert("Error: " + err)
+			}
+		}
+
+		function selectCard() {
 			//掩码
-			var jsonmask=[true,"BBBBFFFFEEEEFFFF99997777"];
-			uhf.selectCard(null,null,jsonmask);
-			//设置读卡区域，地址，块数，密码
-			var jsonstr=[1,2,2,"00000000"];
-			uhf.readArea(null,failInit,jsonstr);
-			uhf.getReadAreaResult(readResult, readFail);
-		} catch (err) {
-			alert("Error: " + err)
+			var maskStr = document.getElementById("mask").value;
+			var jsonmask = [true, maskStr];
+			uhf.selectCard(winInit, failInit, jsonmask);
 		}
-	}
-	
-	var readResult = function (result) {
-            document.getElementById("content").innerHTML = result;
-        };
 
-    var readFail = function (error) {
-            document.getElementById("content").innerHTML = error;
-        };
-        
-    function writeArea(){
-	try {
-	       //设置写卡区域，地址，密码，内容
-			var jsonstr=[1,2,"00000000","11111111"];
-			uhf.writeArea(null,failInit,jsonstr);
-			uhf.getWriteAreaResult(writeResult, writeFail);
-		} catch (err) {
-			alert("Error: " + err)
-		}
-	}
-	
-	var writeResult = function (result) {
-            document.getElementById("content").innerHTML = result;
-        };
-
-    var writeFail = function (error) {
-            document.getElementById("content").innerHTML = error;
-        };
-        
-        
-	function setAntennaPower(){
-	try {
-	       //设置天线功率（3992模块传参0代表false 1代表true）,（旗联-FLX模块取值为19-30）其他0-30
-			var jsonstr=[29];
-			uhf.setAntennaPower(winInit,failInit,jsonstr);
-			
-		} catch (err) {
-			alert("Error: " + err)
-		}
-	}
-	function getAntennaPower(){
-	try {
-	       //读取当前天线功率值
-			uhf.getAntennaPower(winInit,failInit);
-			
-		} catch (err) {
-			alert("Error: " + err)
-		}
-	}
-	function setFreqRegion(){
-	try {
-	       //设置频率区域
-	        var jsonstr=[2];
-			uhf.setFreqRegion(winInit,failInit,jsonstr);
-			
-		} catch (err) {
-			alert("Error: " + err)
-		}
-	}
-	function getFreqRegion(){
-	try {
-	       //获取当前频率区域
-			uhf.getFreqRegion(winInit,failInit);
-			
-		} catch (err) {
-			alert("Error: " + err)
-		}
-	}
-	
-	function inventoryStart(){
-	try {
+		function selectCardCancel() {
 			//取消掩码
-			uhf.selectCard(false,"");
-			//开始盘点
-			uhf.inventoryStart(null,failInit);
-			uhf.getInventoryResult(writeResult, writeFail);
-		} catch (err) {
-			alert("Error: " + err)
+			var jsonmask = [false, ""];
+			uhf.selectCard(winInit, failInit, jsonmask);
 		}
-	}
-	function inventoryStop(){
-	try {
-	       //停止盘点
-			uhf.inventoryStop(winInit,failInit);
-			
-		} catch (err) {
-			alert("Error: " + err)
+
+		var winInit = function (result) {
+			alert(result)
+		};
+		var failInit = function (error) {
+			alert("failed: " + error)
+		};
+
+		function clean() {
+			document.getElementById("content").innerHTML = "";
 		}
-	}
-	
-	function setQueryTagGroup(){
-		try{
-			//设置session值
-			var jsonstr = [0,0,0];
-			uhf.setQueryTagGroup(winInit,failInit,jsonstr);
-		}catch(err){
-			alert("Error: " + err)
-		}
-	}
-	function getQueryTagGroup(){
-		try{
-			//获取session值
-			uhf.getQueryTagGroup(winInit,failInit);
-		}catch(err){
-			alert("Error: " + err)
-		}
-	}
-	
-	function setNewEpc(){
-	try {
-			//掩码
-			var jsonmask=[true,"1111222233334444"];
-			uhf.selectCard(null,null,jsonmask);
-			//设置新的epc，密码，长度（word），新epc
-			var jsonstr=["00000000",4,"AAAA1111BBBB2222"];
-			uhf.setNewEpc(null,failInit,jsonstr);
-			uhf.getWriteAreaResult(writeResult, writeFail);
-		} catch (err) {
-			alert("Error: " + err)
-		}
-	}
-	
-	var winInit = function(result) {
-	    alert(result)
-	};
-	var failInit = function(error) {
-		alert("failed: " + error)
-	};
-	
-	function clean(){
-		document.getElementById("content").innerHTML = "";
-	}
-	
-</script>
+
+	</script>
 </head>
-<body onload="onLoad()" onunload="onUnLoaded()"  id="stage" class="theme">
+
+<body onload="onLoad()" onunload="onUnLoaded()" id="stage" class="theme">
 	<h1>uhf js test</h1>
 	<div id="info">
 		<h4>uhf js test</h4>
 	</div>
-	<button class="btn large" style="width:100px;height:50px" onclick="openDev();">  上电  </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="closeDev();">  下电  </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="readArea();">  读卡  </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="writeArea();">  写卡  </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="inventoryStart();">  开始盘点  </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="inventoryStop();">  停止盘点  </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="setAntennaPower();">  设置天线功率  </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="getAntennaPower();">  获取天线功率  </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="setFreqRegion();">  设置频率区域  </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="getFreqRegion();">  获取频率区域  </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="setQueryTagGroup();">  设置通话项  </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="getQueryTagGroup();">  获取通话项  </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="setNewEpc();">  设置新的EPC  </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="clean();">  清空内容  </button>
-	
+	<button class="btn large" style="width:100px;height:50px" onclick="openDev();"> 上电 </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="closeDev();"> 下电 </button><br>
+	<br>
+	<input type="text" id="mask" placeholder="请输入需要掩码的EPC"><br>
+	<br>
+	<button class="btn large" style="width:100px;height:50px" onclick="selectCard();"> 掩码 </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="selectCardCancel();"> 取消掩码 </button><br>
+	<button class="btn large" style="width:100px;height:50px" onclick="readArea();"> 读卡 </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="writeArea();"> 写卡 </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="inventoryStart();"> 开始盘点 </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="inventoryStop();"> 停止盘点 </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="setAntennaPower();"> 设置天线功率 </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="getAntennaPower();"> 获取天线功率 </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="setFreqRegion();"> 设置频率区域 </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="getFreqRegion();"> 获取频率区域 </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="setQueryTagGroup();"> 设置通话项 </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="getQueryTagGroup();"> 获取通话项 </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="setNewEpc();"> 设置新的EPC </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="clean();"> 清空内容 </button>
+
 	<p id="content"></p>
 </body>
+
 </html>
