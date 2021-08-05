@@ -22,6 +22,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+		maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
     }
 
     dependencies {
@@ -36,6 +37,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+		maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
     }
 
     //This replaces project.properties w.r.t. build settings

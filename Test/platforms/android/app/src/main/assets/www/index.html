@@ -15,6 +15,7 @@
 			try {
 
 				//GPIO上電
+				//Connect UHF module
 				uhf.openDev(winInit, failInit);
 			} catch (err) {
 				alert("Error: " + err)
@@ -24,6 +25,7 @@
 			try {
 
 				//GPIO下电
+				//Disconnect UHF module
 				uhf.closeDev(winInit, failInit);
 			} catch (err) {
 				alert("Error: " + err)
@@ -33,6 +35,7 @@
 		function readArea() {
 			try {
 				//设置读卡区域，地址，块数，密码
+				//Set the area, address, blocks, password for reading tag
 				var jsonstr = [1, 2, 2, "00000000"];
 				uhf.readArea(null, failInit, jsonstr);
 				uhf.getReadAreaResult(readResult, readFail);
@@ -52,6 +55,7 @@
 		function writeArea() {
 			try {
 				//设置写卡区域，地址，密码，内容
+				//Set the area, address, blocks, password for writing tag
 				var jsonstr = [1, 2, "00000000", "11111111"];
 				uhf.writeArea(null, failInit, jsonstr);
 				uhf.getWriteAreaResult(writeResult, writeFail);
@@ -72,6 +76,7 @@
 		function setAntennaPower() {
 			try {
 				//设置天线功率（3992模块传参0代表false 1代表true）,（旗联-FLX模块取值为19-30）其他0-30
+				//Set module power level,(SD60RT 0-30)
 				var jsonstr = [29];
 				uhf.setAntennaPower(winInit, failInit, jsonstr);
 
@@ -82,6 +87,7 @@
 		function getAntennaPower() {
 			try {
 				//读取当前天线功率值
+				//Get module power level
 				uhf.getAntennaPower(winInit, failInit);
 
 			} catch (err) {
@@ -91,6 +97,7 @@
 		function setFreqRegion() {
 			try {
 				//设置频率区域
+				//Set module power level
 				var jsonstr = [2];
 				uhf.setFreqRegion(winInit, failInit, jsonstr);
 
@@ -101,6 +108,7 @@
 		function getFreqRegion() {
 			try {
 				//获取当前频率区域
+				//Get frequency
 				uhf.getFreqRegion(winInit, failInit);
 
 			} catch (err) {
@@ -110,10 +118,10 @@
 
 		function inventoryStart() {
 			try {
-				//取消掩码
+				//取消掩码 Uncheck tag
 				// var jsonmask = [false, ""];
 				// uhf.selectCard(null, null, jsonmask);
-				//开始盘点
+				//开始盘点 Inentory start
 				uhf.inventoryStart(null, failInit);
 				uhf.getInventoryResult(writeResult, writeFail);
 			} catch (err) {
@@ -123,6 +131,7 @@
 		function inventoryStop() {
 			try {
 				//停止盘点
+				//Inentory stop
 				uhf.inventoryStop(winInit, failInit);
 
 			} catch (err) {
@@ -133,6 +142,7 @@
 		function setQueryTagGroup() {
 			try {
 				//设置session值
+				// Set Session
 				var jsonstr = [0, 0, 0];
 				uhf.setQueryTagGroup(winInit, failInit, jsonstr);
 			} catch (err) {
@@ -142,6 +152,7 @@
 		function getQueryTagGroup() {
 			try {
 				//获取session值
+				//Get session
 				uhf.getQueryTagGroup(winInit, failInit);
 			} catch (err) {
 				alert("Error: " + err)
@@ -150,10 +161,12 @@
 
 		function setNewEpc() {
 			try {
-				//掩码
+				//选卡
+				//Check tag
 				var jsonmask = [true, "1111222233334444"];
 				uhf.selectCard(null, null, jsonmask);
-				//设置新的epc，密码，长度（word），新epc
+				//设置新的epc，密码，Length (word)，EPC
+				//Write a new EPC,password,
 				var jsonstr = ["00000000", 4, "AAAA1111BBBB2222"];
 				uhf.setNewEpc(null, failInit, jsonstr);
 				uhf.getWriteAreaResult(writeResult, writeFail);
@@ -163,18 +176,114 @@
 		}
 
 		function selectCard() {
-			//掩码
+			//选卡
+			//Check tag
 			var maskStr = document.getElementById("mask").value;
 			var jsonmask = [true, maskStr];
 			uhf.selectCard(winInit, failInit, jsonmask);
 		}
 
 		function selectCardCancel() {
-			//取消掩码
+			//取消选卡
+			//Uncheck tag
 			var jsonmask = [false, ""];
 			uhf.selectCard(winInit, failInit, jsonmask);
 		}
 
+		function setInvMode(){
+			try {
+				//设置盘点内容 第一个参数 0- epc 1- epc+tid 2- epc+user
+				//Set the area when inventory
+				//parameter 0:EPC 1:EPC+TID 2:EPC+USER
+				//epc+tid
+				var jsonstr = [1, 0, 6];
+				uhf.setInvMode(winInit, failInit, jsonstr)
+			} catch (error) {
+				alert("Error: " + error)
+			}
+		}
+		
+		function setInvModeEpc(){
+			try {
+				//设置盘点内容 第一个参数 0- epc 1- epc+tid 2- epc+user
+				//Set the area when inventory
+				//parameter 0:EPC 1:EPC+TID 2:EPC+USER
+				//仅epc
+				var jsonstr = [0, 0, 6];
+				uhf.setInvMode(winInit, failInit, jsonstr)
+			} catch (error) {
+				alert("Error: " + error)
+			}
+		}
+
+		function getInvMode(){
+			try {
+				//获取盘点内容 第一个参数  0-附加区，1-起始地址，2-长度
+				//Get inventory area mode
+				//0：area 1：starting address 2: length
+				var jsonstr = [0];
+				uhf.getInvMode(winInit, failInit, jsonstr)
+			} catch (error) {
+				alert("Error: " + error)
+			}
+		}
+
+		function switchInvModeOn(){
+			try {
+				//设置快速模式 第一个参数  1-快速模式 2-普通模式（一芯模块是0）
+				//Turn on quick inventory mode
+				//In the case of a large number of tags, it is recommended to turn on quick mode 1.
+				//Mode 1 consumes more battery power. Select whether to enable the follow-up scene.
+				var jsonstr = [1];
+				uhf.switchInvMode(winInit, failInit, jsonstr)
+			} catch (error) {
+				alert("Error: " + error)
+			}
+		}
+
+		function switchInvModeOff(){
+			try {
+				//设置普通模式 第一个参数  1-快速模式 2-普通模式（一芯模块是非1）
+				//Turn off quick inventory mode				
+				var jsonstr = [2];
+				uhf.switchInvMode(winInit, failInit, jsonstr)
+			} catch (error) {
+				alert("Error: " + error)
+			}
+		}
+
+		function getSwitchInvMode(){
+			try {
+				//获取当前盘点模式
+				//Get the current inventory mode
+				uhf.getSwitchInvMode(winInit, failInit)
+			} catch (error) {
+				alert("Error: " + error)
+			}
+		}
+
+		function updateVersion(){
+			try {
+				//更新固件
+				//Update module firmware
+				var jsonstr = ["path","name"];
+				uhf.updateVersion(winInit, failInit,jsonstr)
+			} catch (error) {
+				alert("Error: " + error)
+			}
+		}
+		
+		function switchUhfScan(){
+			try {
+				//修改扫描或超高频
+				var jsonstr = [0];
+				uhf.switchUhfScan(winInit, failInit,jsonstr)
+			} catch (error) {
+				alert("Error: " + error)
+			}
+		}
+		
+		
 		var winInit = function (result) {
 			alert(result)
 		};
@@ -194,25 +303,32 @@
 	<div id="info">
 		<h4>uhf js test</h4>
 	</div>
-	<button class="btn large" style="width:100px;height:50px" onclick="openDev();"> 上电 </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="closeDev();"> 下电 </button><br>
+	<button class="btn large" style="width:100px;height:50px" onclick="openDev();"> Power on </button> 
+	<button class="btn large" style="width:100px;height:50px" onclick="closeDev();"> Power off </button><br> 
 	<br>
-	<input type="text" id="mask" placeholder="请输入需要掩码的EPC"><br>
+	<input type="text" id="mask" placeholder="Enter the EPC for read/write tag"><br>
 	<br>
-	<button class="btn large" style="width:100px;height:50px" onclick="selectCard();"> 掩码 </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="selectCardCancel();"> 取消掩码 </button><br>
-	<button class="btn large" style="width:100px;height:50px" onclick="readArea();"> 读卡 </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="writeArea();"> 写卡 </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="inventoryStart();"> 开始盘点 </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="inventoryStop();"> 停止盘点 </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="setAntennaPower();"> 设置天线功率 </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="getAntennaPower();"> 获取天线功率 </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="setFreqRegion();"> 设置频率区域 </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="getFreqRegion();"> 获取频率区域 </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="setQueryTagGroup();"> 设置通话项 </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="getQueryTagGroup();"> 获取通话项 </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="setNewEpc();"> 设置新的EPC </button>
-	<button class="btn large" style="width:100px;height:50px" onclick="clean();"> 清空内容 </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="selectCard();"> Select tag </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="selectCardCancel();"> Deselect tag </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="readArea();"> Read tag </button><br>
+	<button class="btn large" style="width:100px;height:50px" onclick="writeArea();"> Write tag </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="getSwitchInvMode();"> Get Inv mode </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="inventoryStart();"> Inv start </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="inventoryStop();"> Inv stop </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="setAntennaPower();"> Set power </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="getAntennaPower();"> Get power </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="setFreqRegion();"> Set frequency </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="getFreqRegion();"> Get frequency </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="setQueryTagGroup();"> Set Query </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="getQueryTagGroup();"> Get Query </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="setNewEpc();"> Set new EPC </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="setInvMode();"> EPC+TID Inv </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="setInvModeEpc();"> EPC Inv </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="getInvMode();"> Get inv area </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="switchInvModeOn();"> Quick Inv on </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="switchInvModeOff();"> Quick Inv off </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="clean();"> Clear data </button>
+	<button class="btn large" style="width:100px;height:50px" onclick="switchUhfScan();"> Switch Uhf Scan </button>
 
 	<p id="content"></p>
 </body>

@@ -23,7 +23,6 @@ import com.speedata.libuhf.interfaces.OnSpdReadListener;
 import com.speedata.libuhf.interfaces.OnSpdWriteListener;
 import com.speedata.libutils.ConfigUtils;
 import com.speedata.libutils.ReadBean;
-import com.speedata.libuhf.utils.StringUtils;
 import com.uhf.structures.OnInventoryListener;
 import com.uhf.structures.OnReadWriteListener;
 
@@ -34,6 +33,8 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.os.SystemProperties;
+import com.speedata.libuhf.utils.SharedXmlUtil;
 
 public class UHF extends CordovaPlugin {
 	private static CallbackContext callbackContext;
@@ -41,6 +42,20 @@ public class UHF extends CordovaPlugin {
 	private IUHFService uhfService;
 	private Context mContext;
 	private boolean isSuccess = false;
+	private SharedXmlUtil sharedXmlUtil;
+	
+	/**
+     * 扫头模式
+     */
+    public static final int MODE_SCAN = 1;
+    /**
+     * 超高频单次模式
+     */
+    public static final int MODE_UHF = 2;
+    /**
+     * 超高频重复模式
+     */
+    public static final int MODE_UHF_RE = 3;
 
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -48,6 +63,9 @@ public class UHF extends CordovaPlugin {
 		mContext = webView.getContext();
 		uhfService = UHFManager.getUHFService(mContext);
 		final Gson gson = new Gson();
+		
+		sharedXmlUtil = SharedXmlUtil.getInstance(mContext, "rfid_float_button");
+		
 		uhfService.setOnInventoryListener(new OnSpdInventoryListener() {
 
 			@Override
@@ -57,13 +75,11 @@ public class UHF extends CordovaPlugin {
 				String objectStr = gson.toJson(arg0);
 				sendString(objectStr);
 			}
-
+			
 			@Override
             public void onInventoryStatus(int status) {
-				Log.d(LOG_TAG, "onInventoryStatus");
-				String objectStr = gson.toJson(status);
-				sendString(objectStr);
-			}
+                uhfService.inventoryStart();
+            }
 		});
 		uhfService.setOnReadListener(new OnSpdReadListener() {
 
@@ -184,7 +200,7 @@ public class UHF extends CordovaPlugin {
 					int addr = args.getInt(1);
 					String passwd = args.getString(2);
 					String content = args.getString(3);
-					byte[] contentBytes = StringUtils.stringToByte(content);
+					byte[] contentBytes = content.getBytes();
 					int result = uhfService.writeArea(area, addr,
 							contentBytes.length / 2, passwd, contentBytes);
 					Log.d(LOG_TAG, "writeArea" + result);
@@ -335,26 +351,69 @@ public class UHF extends CordovaPlugin {
 				} else {
 					callbackContextID.error("ErrorCode:" + result);
 				}
-			} else if (action.equals("setNewEpc")) {
-				Log.d(LOG_TAG, "setNewEpc");
-				try {
-					String password = args.getString(0);
-					int len = args.getInt(1);
-					String hexEpc = args.getString(2);
-					byte[] newEpc = StringUtils.stringToByte(hexEpc);
-					int result = uhfService.setNewEpc(password, len, newEpc);
-					Log.d(LOG_TAG, "setNewEpc" + result);
-					if (result == 0) {
-						callbackContextID.success("success");
-					} else {
-						callbackContextID.error("ErrorCode:" + result);
-					}
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					callbackContextID.error(Log.getStackTraceString(e));
+			} else if (action.equals("setInvMode")) {
+				int invm = args.getInt(0);
+				int addr = args.getInt(1);
+				int length = args.getInt(2);
+				int result = uhfService.setInvMode(invm, addr, length);
+				Log.d(LOG_TAG, "setInvMode" + result);
+				if (result == 0) {
+					callbackContextID.success(result);
+				} else {
+					callbackContextID.error("ErrorCode:" + result);
 				}
-			}
+			} else if (action.equals("getInvMode")) {
+				int type = args.getInt(0);
+				int result = uhfService.getInvMode(type);
+				Log.d(LOG_TAG, "getInvMode" + result);
+				if (result != -1) {
+					callbackContextID.success(result);
+				} else {
+					callbackContextID.error("ErrorCode:" + result);
+				}
+			} else if (action.equals("switchInvMode")) {
+				int mode = args.getInt(0);
+				int result = uhfService.switchInvMode(mode);
+				Log.d(LOG_TAG, "switchInvMode" + result);
+				if (result == 0) {
+					callbackContextID.success(result);
+				} else {
+					callbackContextID.error("ErrorCode:" + result);
+				}
+			} else if (action.equals("getSwitchInvMode")) {
+				int result = uhfService.getSwitchInvMode();
+				Log.d(LOG_TAG, "getSwitchInvMode" + result);
+				if (result != -1) {
+					callbackContextID.success(result);
+				} else {
+					callbackContextID.error("ErrorCode:" + result);
+				}
+			} else if (action.equals("updateVersion")) {
+				String filePath = args.getString(0);
+				String fileName = args.getString(1);
+				int result = uhfService.updateVersion(filePath, fileName);
+				Log.d(LOG_TAG, "updateVersion" + result);
+				if (result != -1) {
+					callbackContextID.success(result);
+				} else {
+					callbackContextID.error("ErrorCode:" + result);
+				}
+			} else if (action.equals("switchUhfScan")) {
+				int isUhf = args.getInt(0);
+				if(isUhf == 0){
+					SystemProperties.set("persist.sys.PistolKey", "scan");
+					sharedXmlUtil.write("current_mode", MODE_SCAN);
+				}else if(isUhf == 1){
+					SystemProperties.set("persist.sys.PistolKey", "uhf");
+					 sharedXmlUtil.write("current_mode", MODE_UHF);
+				}else if(isUhf == 2){
+					SystemProperties.set("persist.sys.PistolKey", "uhf");
+					sharedXmlUtil.write("current_mode", MODE_UHF_RE);
+				}
+				int result = sharedXmlUtil.read("current_mode", MODE_SCAN);
+				Log.d(LOG_TAG, "switchUhfScan" + result);
+				callbackContextID.success(result);
+			} 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
